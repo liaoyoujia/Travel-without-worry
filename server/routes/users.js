@@ -1,7 +1,18 @@
-var express = require('express');
-var router = express.Router();
-
+let express = require('express');
+let router = express.Router();
+const { login, regist } = require('../controller/user')
 /* GET users listing. */
+router.post('/regist', function (req, res, next) {
+  const { username, password, realname } = req.body
+  console.log(req.body, 31231231)
+  const result = regist(username, password, realname)
+  return result.then(data => {
+    res.json(
+      new SuccessModel(data)
+    )
+  })
+});
+
 router.post('/login', function (req, res, next) {
   const { username, password } = req.body
   const result = login(username, password)

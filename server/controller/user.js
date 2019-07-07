@@ -13,7 +13,25 @@ const login = (username, password) => {
     return rows[0] || {}
   })
 }
+const regist = (username, password, realname) => {
+  username = escape(username)
+  realname = escape(realname)
+  // 生成加密密码
+  password = genPassword(password)
+  password = escape(password)
+  console.log(username, realname, password, 123456);
 
+  const sql = `
+  insert into users (username, password, realname)
+  values ('${username}', '${password}', '${realname}');
+`
+  return exec(sql).then(insertData => {
+    return {
+      id: insertData.insertId
+    }
+  })
+}
 module.exports = {
-  login
+  login,
+  regist
 }
