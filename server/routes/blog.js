@@ -52,6 +52,7 @@ router.post('/update', loginCheck, (req, res, next) => {
 })
 router.post('/del', loginCheck, (req, res, next) => {
   const author = req.session.username
+  console.log(req.query.id, 'lioadasdasd')
   const result = delBlog(req.query.id, author)
   return result.then(val => {
     if (val) {

@@ -23,7 +23,7 @@ const regist = (username, password, realname) => {
 
   const sql = `
   insert into users (username, password, realname)
-  values ('${username}', '${password}', '${realname}');
+  values (${username}, ${password}, ${realname});
 `
   return exec(sql).then(insertData => {
     return {

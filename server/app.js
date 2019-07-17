@@ -21,6 +21,8 @@ const sessionStore = new RedisStore({
 })
 app.use(session({
   secret: 'WJiol#23123_',
+  resave: false, //添加 resave 选项
+  saveUninitialized: true, //添加 saveUninitialized 选项
   cookie: {
     // path: '/',   // 默认配置
     // httpOnly: true,  // 默认配置
@@ -28,7 +30,6 @@ app.use(session({
   },
   store: sessionStore
 }))
-
 app.use('/api/users', usersRouter);
 app.use('/api/blogs', blogRouter);
 

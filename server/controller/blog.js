@@ -26,7 +26,6 @@ const newBlog = (blogData = {}) => {
   const content = xss(blogData.content)
   const author = blogData.author
   const createTime = Date.now()
-
   const sql = `
       insert into blogs (title, content, createtime, author)
       values ('${title}', '${content}', ${createTime}, '${author}');
