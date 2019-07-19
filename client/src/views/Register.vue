@@ -1,6 +1,6 @@
 <template>
-  <div class="login">
-    <h1>登录</h1>
+  <div class="register">
+    <h1>注册</h1>
     <el-form
       :model="ruleForm"
       status-icon
@@ -12,6 +12,9 @@
       <el-form-item label="用户名" prop="user">
         <el-input v-model="ruleForm.user" autocomplete="off"></el-input>
       </el-form-item>
+      <el-form-item label="真实姓名" prop="real">
+        <el-input v-model="ruleForm.real" autocomplete="off"></el-input>
+      </el-form-item>
       <el-form-item label="密码" prop="pass">
         <el-input
           type="password"
@@ -21,12 +24,11 @@
       </el-form-item>
       <div class="submit">
         <el-button type="primary" @click="submitForm('ruleForm')"
-          >登录</el-button
+          >注册</el-button
         >
         <el-button @click="resetForm('ruleForm')" class="reset-btn"
           >重置</el-button
         >
-        <el-button @click="goRegister">注册</el-button>
       </div>
     </el-form>
   </div>
@@ -35,7 +37,7 @@
 <script>
 import Axios from '../plugins/axios/index.js'
 export default {
-  name: 'login',
+  name: 'register',
   data () {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
@@ -51,14 +53,23 @@ export default {
         callback()
       }
     }
+    var validateRealname = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入真实用户名'))
+      } else {
+        callback()
+      }
+    }
     return {
       ruleForm: {
         pass: '',
-        user: ''
+        user: '',
+        real: ''
       },
       rules: {
         pass: [{ validator: validatePass, trigger: 'blur' }],
-        user: [{ validator: validateUsername, trigger: 'blur' }]
+        user: [{ validator: validateUsername, trigger: 'blur' }],
+        real: [{ validator: validateRealname, trigger: 'blur' }]
       }
     }
   },
@@ -69,10 +80,12 @@ export default {
           let o = {}
           o.username = this.ruleForm.user
           o.password = this.ruleForm.pass
-          Axios.getLogin(o).then(res => {
-            if (res.errno === 0 && res.data.login === 'success') {
-              this.$router.push({ name: 'home' })
-            }
+          o.realname = this.ruleForm.real
+          Axios.getRegister(o).then(res => {
+            console.log(res, 12313122)
+            // if (res.errno === 0 && res.data.login === 'success') {
+            //   this.$router.push({ name: 'home' })
+            // }
           })
         } else {
           console.log('error submit!!')
@@ -82,15 +95,12 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
-    },
-    goRegister () {
-      this.$router.push({ name: 'register' })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-  .login {
+  .register {
     width: 400px;
     margin: 300px auto 0;
     h1 {

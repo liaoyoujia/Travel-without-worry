@@ -19,8 +19,6 @@ const regist = (username, password, realname) => {
   // 生成加密密码
   password = genPassword(password)
   password = escape(password)
-  console.log(username, realname, password, 123456);
-
   const sql = `
   insert into users (username, password, realname)
   values (${username}, ${password}, ${realname});

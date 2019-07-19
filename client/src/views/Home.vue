@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      zhuce
+    shouye
   </div>
 </template>
 
