@@ -1,6 +1,6 @@
 import axios from 'axios'
 // import store from '@/plugins/store/index'
-// import router from '@/plugins/router'
+import router from '@/router.js'
 // 创建axios实例
 const instance = axios.create({
   baseURL: '/'
@@ -26,6 +26,12 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     if (response.status === 200) {
+      console.log(response.data.errno, 11111111)
+      if (response.data.errno == '-1' && response.data.message === '未登录') {
+        console.log(3131233123131223123)
+        router.replace({ name: 'login' })
+        return
+      }
       return response.data
     } else {
       return Promise.reject(response)

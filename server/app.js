@@ -27,6 +27,8 @@ app.use(session({
     // path: '/',   // 默认配置
     // httpOnly: true,  // 默认配置
     maxAge: 24 * 60 * 60 * 1000
+    // maxAge: 10 * 1000
+    // maxAge: 100
   },
   store: sessionStore
 }))

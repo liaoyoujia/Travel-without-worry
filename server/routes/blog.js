@@ -11,6 +11,8 @@ router.get('/list', loginCheck, (req, res, next) => {
   const result = getList(author, keyword)
   return result.then(listData => {
     // if()
+
+
     res.json(
       new SuccessModel(listData)
     )
