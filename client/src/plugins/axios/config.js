@@ -1,6 +1,8 @@
 import axios from 'axios'
 // import store from '@/plugins/store/index'
 import router from '@/router.js'
+import vue from '@/main.js'
+let loading
 // 创建axios实例
 const instance = axios.create({
   baseURL: '/'
@@ -10,6 +12,9 @@ const instance = axios.create({
 // request拦截器
 instance.interceptors.request.use(
   config => {
+    loading = vue.$loading({
+      text: '拼命加载中...'
+    })
     // const { vx_token } = store.state.user
     // const { url } = config
     // if ((url.indexOf('authentication/user') === -1) && vx_token) {
@@ -18,6 +23,7 @@ instance.interceptors.request.use(
     return config
   },
   error => {
+    loading.close()
     return Promise.reject(error)
   }
 )
@@ -25,10 +31,10 @@ instance.interceptors.request.use(
 // response拦截器
 instance.interceptors.response.use(
   response => {
+    loading.close()
     if (response.status === 200) {
       console.log(response.data.errno, 11111111)
-      if (response.data.errno == '-1' && response.data.message === '未登录') {
-        console.log(3131233123131223123)
+      if (response.data.errno === -1 && response.data.message === '未登录') {
         router.replace({ name: 'login' })
         return
       }
@@ -38,6 +44,7 @@ instance.interceptors.response.use(
     }
   },
   error => {
+    loading.close()
     if (error.response && error.response.status) {
       switch (error.response.status) {
         case 401:

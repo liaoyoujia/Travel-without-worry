@@ -1,32 +1,34 @@
 <template>
   <div class="login">
-    <img src="../assets/logo.jpg"
-      alt="">
+    <img src="../assets/logo.jpg" alt="" />
     <h1>Sign in to Blog</h1>
-    <el-form :model="ruleForm"
+    <el-form
+      :model="ruleForm"
       status-icon
       :rules="rules"
       ref="ruleForm"
-      class="ruleForm">
-      <el-form-item label="Username"
-        prop="user">
-        <el-input v-model="ruleForm.user"
-          autocomplete="off"></el-input>
+      class="ruleForm"
+    >
+      <el-form-item label="Username" prop="user">
+        <el-input v-model="ruleForm.user" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="Password"
-        prop="pass">
-        <el-input type="password"
+      <el-form-item label="Password" prop="pass">
+        <el-input
+          type="password"
           v-model="ruleForm.pass"
-          autocomplete="off"></el-input>
+          autocomplete="off"
+        ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn"
-          @click="submitForm('ruleForm')">Sign in</el-button>
+        <el-button class="login-btn" @click="submitForm('ruleForm')"
+          >Sign in</el-button
+        >
       </el-form-item>
     </el-form>
     <div class="reset">
-      <el-button class="reset-btn"
-        @click="goRegister">Create an Account</el-button>
+      <el-button class="reset-btn" @click="goRegister"
+        >Create an Account</el-button
+      >
     </div>
   </div>
 </template>
@@ -89,44 +91,44 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.login {
-  width: 340px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  margin: 30px auto 0;
-  img {
-    width: 68px;
-  }
-  h1 {
-    text-align: center;
-    font-size: 24px;
-    font-weight: 300;
-    padding: 24px 0;
-    color: #333;
-  }
-  .login-btn {
-    width: 100%;
-    background-color: #28a745;
-    color: #fff;
-    font-weight: 400;
-    font-size: 14px;
-  }
-  .ruleForm {
-    width: 308px;
-    padding: 20px 20px;
-    box-sizing: border-box;
-    border: 1px solid #f1f1f1;
-    border-radius: 10px;
-    color: #24292e;
-  }
-  .reset {
-    width: 308px;
-    margin: 20px auto 0;
-    .reset-btn {
+  .login {
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 30px auto 0;
+    img {
+      width: 68px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 300;
+      padding: 24px 0;
+      color: #333;
+    }
+    .login-btn {
       width: 100%;
+      background-color: #28a745;
+      color: #fff;
+      font-weight: 400;
+      font-size: 14px;
+    }
+    .ruleForm {
+      width: 308px;
+      padding: 20px 20px;
+      box-sizing: border-box;
+      border: 1px solid #f1f1f1;
+      border-radius: 10px;
+      color: #24292e;
+    }
+    .reset {
+      width: 308px;
+      margin: 20px auto 0;
+      .reset-btn {
+        width: 100%;
+      }
     }
   }
-}
 </style>
