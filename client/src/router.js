@@ -7,27 +7,27 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/',
-      name: 'main',
-      component: Main,
-      children: [
-        {
-          path: '',
-          component: Login
-        },
-        {
-          path: 'register',
-          name: 'register',
-          component: () => import(/* webpackChunkName: "about" */ './views/Register.vue')
-        },
-        {
-          path: 'home',
-          name: 'home',
-          component: () => import(/* webpackChunkName: "about" */ './views/Home.vue')
-        }
-      ]
-    }
+    // {
+    //   path: '/',
+    //   name: 'main',
+    //   component: Main,
+    //   children: [
+    //     {
+    //       path: '',
+    //       component: Login
+    //     },
+    //     {
+    //       path: 'register',
+    //       name: 'register',
+    //       component: () => import(/* webpackChunkName: "about" */ './views/Register.vue')
+    //     },
+    //     {
+    //       path: 'home',
+    //       name: 'home',
+    //       component: () => import(/* webpackChunkName: "about" */ './views/Home.vue')
+    //     }
+    //   ]
+    // }
     // {
     //   path: '/',
     //   name: 'login',
@@ -49,5 +49,22 @@ export default new Router({
     //   // which is lazy-loaded when the route is visited.
     //   component: () => import(/* webpackChunkName: "about" */ './views/Register.vue')
     // }
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/',
+      redirect: '/login',
+      component: Main,
+      children: [
+        {
+          path: 'index',
+          name: 'home',
+          component: () => import(/* webpackChunkName: "about" */ './views/Home.vue')
+        }
+      ]
+    }
   ]
 })
