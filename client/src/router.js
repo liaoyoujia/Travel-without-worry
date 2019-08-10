@@ -62,7 +62,22 @@ export default new Router({
         {
           path: 'index',
           name: 'home',
-          component: () => import(/* webpackChunkName: "about" */ './views/Home.vue')
+          component: () => import(/* webpackChunkName: "about" */ './views/home/Home.vue')
+        },
+        {
+          path: 'history',
+          name: 'history',
+          component: () => import(/* webpackChunkName: "about" */ './views/History.vue')
+        },
+        {
+          path: 'traffic',
+          name: 'traffic',
+          component: () => import(/* webpackChunkName: "about" */ './views/Traffic.vue')
+        },
+        {
+          path: 'my',
+          name: 'my',
+          component: () => import(/* webpackChunkName: "about" */ './views/My.vue')
         }
       ]
     }
