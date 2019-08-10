@@ -6,6 +6,8 @@ import './plugins/vant/index'
 import 'amfe-flexible/index'
 import './styles/reset.scss'
 Vue.config.productionTip = false
+// Vue.prototype.$router = router
+// Vue.prototype.$router = router
 let vue = new Vue({
   router,
   store,

@@ -67,7 +67,19 @@ export default new Router({
         {
           path: 'history',
           name: 'history',
-          component: () => import(/* webpackChunkName: "about" */ './views/History.vue')
+          component: () => import(/* webpackChunkName: "about" */ './views/history/History.vue'),
+          children: [
+            {
+              path: '/',
+              name: 'histoyIndex',
+              component: () => import(/* webpackChunkName: "about" */ './views/history/HistoryIndex.vue')
+            },
+            {
+              path: 'detail/:id',
+              name: 'histoyDetail',
+              component: () => import(/* webpackChunkName: "about" */ './views/history/HistoryDetail.vue')
+            }
+          ]
         },
         {
           path: 'traffic',
