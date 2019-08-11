@@ -1,7 +1,7 @@
 <template>
   <div class="Traffic">
-    <div class="ce"
-      @click="getRoadLine"></div>
+    <!-- <div class="ce"
+      @click="getRoadLine"></div> -->
     <div class="tra-headder">
       <van-row>
         <van-col span="16">
@@ -234,11 +234,11 @@ export default {
     .container {
       width: 100%;
       position: relative;
-      height: calc(100vh - 300px);
+      height: calc(100vh - 154px);
     }
     .v-popup {
       width: 100%;
-      height: calc(100vh - 300px);
+      height: calc(100vh - 154px);
       position: absolute;
       top: 0;
       left: 0;
