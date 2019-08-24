@@ -2,19 +2,21 @@ import axios from 'axios'
 // import store from '@/plugins/store/index'
 import router from '@/router.js'
 import vue from '@/main.js'
-let loading
 // 创建axios实例
 const instance = axios.create({
-  baseURL: '/'
-  // timeout: 60000 // 请求超时时间10秒
+  baseURL: '/',
+  timeout: 6000 // 请求超时时间10秒
 })
 
 // request拦截器
 instance.interceptors.request.use(
   config => {
-    loading = vue.$loading({
-      text: '拼命加载中...'
-    })
+    vue.$toast.loading({
+      duration: 0,       // 持续展示 toast
+      forbidClick: true, // 禁用背景点击
+      loadingType: 'spinner',
+      message: '加载中...'
+    });
     // const { vx_token } = store.state.user
     // const { url } = config
     // if ((url.indexOf('authentication/user') === -1) && vx_token) {
@@ -23,7 +25,7 @@ instance.interceptors.request.use(
     return config
   },
   error => {
-    loading.close()
+    vue.$toast.clear()
     return Promise.reject(error)
   }
 )
@@ -31,9 +33,8 @@ instance.interceptors.request.use(
 // response拦截器
 instance.interceptors.response.use(
   response => {
-    loading.close()
+    vue.$toast.clear()
     if (response.status === 200) {
-      console.log(response.data.errno, 11111111)
       if (response.data.errno === -1 && response.data.message === '未登录') {
         router.replace({ name: 'login' })
         return
@@ -44,7 +45,7 @@ instance.interceptors.response.use(
     }
   },
   error => {
-    loading.close()
+    vue.$toast.clear()
     if (error.response && error.response.status) {
       switch (error.response.status) {
         case 401:

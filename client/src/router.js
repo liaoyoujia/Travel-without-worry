@@ -1,58 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './views/Login.vue'
+import Register from './views/Register.vue'
 import Main from './layout/index.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'main',
-    //   component: Main,
-    //   children: [
-    //     {
-    //       path: '',
-    //       component: Login
-    //     },
-    //     {
-    //       path: 'register',
-    //       name: 'register',
-    //       component: () => import(/* webpackChunkName: "about" */ './views/Register.vue')
-    //     },
-    //     {
-    //       path: 'home',
-    //       name: 'home',
-    //       component: () => import(/* webpackChunkName: "about" */ './views/Home.vue')
-    //     }
-    //   ]
-    // }
-    // {
-    //   path: '/',
-    //   name: 'login',
-    //   component: Login
-    // },
-    // {
-    // path: '/home',
-    // name: 'home',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ './views/Home.vue')
-    // },
-    // {
-    //   path: '/register',
-    //   name: 'register',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (about.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import(/* webpackChunkName: "about" */ './views/Register.vue')
-    // }
     {
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     },
     {
       path: '/',
@@ -62,7 +26,19 @@ export default new Router({
         {
           path: 'index',
           name: 'home',
-          component: () => import(/* webpackChunkName: "about" */ './views/home/Home.vue')
+          component: () => import(/* webpackChunkName: "about" */ './views/home/Home.vue'),
+          children: [
+            {
+              path: '/',
+              name: 'homeIndex',
+              component: () => import(/* webpackChunkName: "about" */ './views/home/HomeIndex.vue')
+            },
+            {
+              path: 'detail',
+              name: 'homeDetail',
+              component: () => import(/* webpackChunkName: "about" */ './views/home/HomeDetail.vue')
+            }
+          ]
         },
         {
           path: 'history',
@@ -89,7 +65,19 @@ export default new Router({
         {
           path: 'my',
           name: 'my',
-          component: () => import(/* webpackChunkName: "about" */ './views/My.vue')
+          component: () => import(/* webpackChunkName: "about" */ './views/my/My.vue'),
+          children: [
+            {
+              path: '/',
+              name: 'myIndex',
+              component: () => import(/* webpackChunkName: "about" */ './views/my/MyIndex.vue')
+            },
+            {
+              path: 'infor',
+              name: 'myInfor',
+              component: () => import(/* webpackChunkName: "about" */ './views/my/MyInfor.vue')
+            }
+          ]
         }
       ]
     }

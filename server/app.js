@@ -7,6 +7,7 @@ const RedisStore = require('connect-redis')(session)
 
 let blogRouter = require('./routes/blog');
 let usersRouter = require('./routes/users');
+let ruleUserRouter = require('./routes/ruleUser');
 
 let app = express();
 
@@ -34,5 +35,6 @@ app.use(session({
 }))
 app.use('/api/users', usersRouter);
 app.use('/api/blogs', blogRouter);
+app.use('/api/ruleUsers', ruleUserRouter);
 
 module.exports = app;

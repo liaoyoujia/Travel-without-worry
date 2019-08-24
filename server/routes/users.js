@@ -7,7 +7,7 @@ router.post('/regist', function (req, res, next) {
   const { username, password, realname } = req.body
   const result = regist(username, password, realname)
   return result.then(data => {
-    if (data && data.id) {
+      if (data && data.id) {
       return res.json(
         new SuccessModel(data)
       )
@@ -17,13 +17,13 @@ router.post('/regist', function (req, res, next) {
       )
     }
 
-  })
+  }).catch((err) => { console.log(err, '报错了') })
 });
-
 router.post('/login', function (req, res, next) {
   const { username, password } = req.body
   const result = login(username, password)
   return result.then(data => {
+    console.log(data, '登录')
     if (data.username) {
       // 设置 session
       req.session.username = data.username

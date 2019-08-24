@@ -1,7 +1,5 @@
 <template>
   <div class="Traffic">
-    <!-- <div class="ce"
-      @click="getRoadLine"></div> -->
     <div class="tra-headder">
       <van-row>
         <van-col span="16">
@@ -17,6 +15,7 @@
             clickable
             :value="value"
             placeholder="选择出行方式"
+            input-align="center"
             @click="showPicker = true" />
         </van-col>
       </van-row>
@@ -32,7 +31,7 @@
             @input="searchPlace($event,'end')" />
         </van-col>
         <van-col span="8"
-          class="search-type">搜索</van-col>
+          class="search-type" @click.native="getRoadLine()">搜索</van-col>
       </van-row>
     </div>
     <div class="box">
@@ -55,10 +54,14 @@
       </div>
       <div class="container"
         id="container">
-        <div class="v-popup"
+        <div class="v-popup-show1"
           v-show="show1">
-          <i class="iconfont iconxiangshang special"
-            @click="cancelPopup"></i>
+          <div class="v-popup-header">
+            <div class="fit-route">请选择合适路线</div>
+            <i class="iconfont iconxiangshang special"
+            @click="cancelShow1Popup"></i>
+            <div class="v-popup-sure">确定</div>
+          </div>
           <div class="pane"
             id="pane"></div>
         </div>
@@ -71,6 +74,45 @@
         @cancel="showPicker = false"
         @confirm="onConfirm" />
     </van-popup>
+    <van-popup v-model="chuxingReport"
+    class="v-pop-chuxing">
+      <div class="chuxing">
+        <h5>本次出行</h5>
+        <div class="v-pop-chuxing-item">
+          <div class="v-pop-chuxing-item-left">交通公交</div>
+          <div class="v-pop-chuxing-item-right">出租</div>
+        </div>
+        <div class="v-pop-chuxing-item">
+          <div class="v-pop-chuxing-item-left">出发地</div>
+          <div class="v-pop-chuxing-item-right">出租</div>
+        </div>
+        <div class="v-pop-chuxing-item">
+          <div class="v-pop-chuxing-item-left">目的地</div>
+          <div class="v-pop-chuxing-item-right">出租</div>
+        </div>
+        <div class="v-pop-chuxing-item">
+          <div class="v-pop-chuxing-item-left">花费</div>
+          <div class="v-pop-chuxing-item-right">
+              <van-stepper v-model="huafei" />
+          </div>
+        </div>
+        <div class="v-pop-chuxing-item">
+          <div class="v-pop-chuxing-item-left">日期</div>
+          <div class="v-pop-chuxing-item-right"></div>
+        </div>
+        <div class="v-pop-chuxing-item">
+          <div class="v-pop-chuxing-item-left">备注</div>
+          <div class="v-pop-chuxing-item-right">
+              <van-field
+              v-model="beizhu"
+              maxlength=20
+              placeholder="输入行程备注,少于20字！"
+            />
+          </div>
+        </div>
+        <div class="chuxing-save">确认保存</div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -80,15 +122,25 @@ export default {
   data () {
     return {
       loactionMap: null,
-      showPicker: false,
+      showPicker:false,
+      huafei:0,
       value: '',
+      beizhu:'',
+      chuxingReport:true,
       originPlace: '',
       originPlD: [],
       endPlace: '',
       endPlD: [],
+      driving:null,
       show: false,
       show1: false,
       columns: ['公交/地铁', '出租车', '单车/电车', '步行'],
+      toolType:{
+        '公交/地铁':'Transfer',
+        '出租车':'Driving',
+        '单车/电车':'Riding',
+        '步行':'Walking',
+      },
       searchData: []
     }
   },
@@ -96,7 +148,6 @@ export default {
     // 初始化地图
     initMap () {
       this.loactionMap = new AMap.Map('container', {
-        resizeEnable: true,
         center: [116.397428, 39.90923],
         resizeEnable: true,
         zoom: 13 // 地图显示的缩放级别
@@ -109,14 +160,7 @@ export default {
         let geolocation = new window.AMap.Geolocation({
           enableHighAccuracy: true, //  是否使用高精度定位，默认:true
           timeout: 10000, //  超过10秒后停止定位，默认：无穷大
-          maximumAge: 0, // 定位结果缓存0毫秒，默认：0
-          convert: true, // 自动偏移坐标，偏移后的坐标为高德坐标，默认：true
-          showButton: true, //  显示定位按钮，默认：true
-          buttonPosition: 'LB', // 定位按钮停靠位置，默认：'LB'，左下角
-          buttonOffset: new window.AMap.Pixel(10, 20), //  定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-          showMarker: true, //  定位成功后在定位到的位置显示点标记，默认：true
-          showCircle: true, //  定位成功后用圆圈表示定位精度范围，默认：true
-          panToLocation: true, //  定位成功后将定位到的位置作为地图中心点，默认：true
+          buttonPosition: 'RB', // 定位按钮停靠位置，默认：'LB'，左下角
           zoomToAccuracy: true //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
         })
         that.loactionMap.addControl(geolocation)
@@ -168,8 +212,13 @@ export default {
     cancelPopup () {
       this.show = false
     },
+    // 取消路线弹出层
+    cancelShow1Popup(){
+      this.show1 = false
+    },
     // 选择地点
     choosePlace (place, type, placeDetail) {
+      this.show=false
       if (type === 'org') {
         this.originPlace = place
         this.originPlD = placeDetail && [placeDetail.lng, placeDetail.lat]
@@ -185,23 +234,24 @@ export default {
     },
     // 得到出行路线
     getRoadLine () {
-      // console.log('kaihsi')
-      console.log('kaishilhahhahahah')
       let that = this
-      if (that.originPlace === '' || that.endPlace === '' || that.originPlD.length === 0 || that.endPlD.length === 0) {
-        console.log('tianzhi')
+      if(that.driving){
+        that.driving.clear()
+      }
+      if (that.originPlace === '' || that.endPlace === '' || that.originPlD.length === 0 || that.endPlD.length === 0||that.value==='') {
+        this.$toast('请将数据填写完全');
+        return  false
       }
       that.show1 = true
-      that.loactionMap.plugin('AMap.Driving', function () {
-        let driving = new window.AMap.Driving({
-          policy: window.AMap.DrivingPolicy.LEAST_TIME,
+      that.loactionMap.plugin(`AMap.${that.toolType[that.value]}`, function () {
+        that.driving = new window.AMap[that.toolType[that.value]]({
           map: that.loactionMap,
           panel: 'pane',
           autoFitView: true
         })
         let startLngLat = that.originPlD
         let endLngLat = that.endPlD
-        driving.search(startLngLat, endLngLat)
+        that.driving.search(startLngLat, endLngLat)
       })
     }
   },
@@ -235,6 +285,40 @@ export default {
       width: 100%;
       position: relative;
       height: calc(100vh - 154px);
+      .v-popup-show1{
+      width: 100%;
+      height: calc(100vh - 254px);
+      position: absolute;
+      top: 100px;
+      left: 0;
+      z-index: 2001;
+      background-color: rgba(255, 255, 255, 0.8);
+      overflow-y: auto;
+      .v-popup-header{
+        width: 100%;
+        box-sizing:border-box;
+        padding: 6px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items:center;
+        .fit-route{
+          color: #929090;
+          font-size: 14px;
+        }
+      .special {
+        position: relative;
+        top: 0;
+        font-size: 36px;
+      }
+      .v-popup-sure{
+        font-size:14px;
+        padding: 6px 10px;
+        background: #2f86f6;
+        border-radius: 6px;
+        color:#fff;
+      }
+      }
+      }
     }
     .v-popup {
       width: 100%;
@@ -282,8 +366,46 @@ export default {
     }
   }
 }
+.v-pop-chuxing{
+  width: 80%;
+  border-radius: 10px;
+    .chuxing{
+      width: 100%;
+      padding:20px 20px;
+      box-sizing:border-box;
+      background-color: #fff;
+      h5{
+        font-size: 20px;
+        padding-bottom: 10px;
+      }
+      .v-pop-chuxing-item{
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        color: #41485d;
+        margin-bottom: 22px;
+        font-size: 12px;
+        .v-pop-chuxing-item-left{
+          width: 25%;
+          text-align:left;
+        }
+        .v-pop-chuxing-item-right{
+          width: 75%;
+          text-align:right;
+        }
+      }
+      .chuxing-save{
+        margin-top: 16px;
+        text-align: center;
+        color: #2f86f6;
+        font-size: 18px;
+      }
+    }
+}
 .pane {
   width: 100%;
-  padding-top: 10px;
+  overflow-y: auto;
+
 }
 </style>

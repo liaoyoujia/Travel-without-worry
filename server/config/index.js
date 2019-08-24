@@ -11,7 +11,7 @@ MYSQL_CONF = {
   user: 'root',
   password: 'lyj123456',
   port: '3306',
-  database: 'my_blog'
+  database: 'trips'
 }
 
 // redis
