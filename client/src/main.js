@@ -11,7 +11,7 @@ import './styles/reset.scss'
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = Axios
-Vue.prototype.$moment=Moment
+Vue.prototype.$moment = Moment
 let vue = new Vue({
   router,
   store,

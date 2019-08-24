@@ -1,7 +1,7 @@
 const xss = require('xss')
 const { exec } = require('../db/mysql')
 const getList = (author, keyword) => {
-  let sql = `select * from blogs where 1=1 `
+  let sql = `select * from routes where 1=1 `
   if (author) {
     sql += `and author='${author}' `
   }
@@ -21,13 +21,14 @@ const getDetail = (id) => {
 }
 const newBlog = (blogData = {}) => {
   // blogData 是一个博客对象，包含 title content author 属性
-  const title = xss(blogData.title)
-  // console.log('title is', title)
-  const content = xss(blogData.content)
-  const author = blogData.author
-  const createTime = Date.now()
+  let { userId, type, trafficType, diatance, date, speed, price, startPlace, startCode, endPlace, endCode, mask } = blogData
+
+  // const title = xss(blogData.title)
+  // const content = xss(blogData.content)
+  // const author = blogData.author
+  // const createTime = Date.now()
   const sql = `
-      insert into blogs (title, content, createtime, author)
+      insert into routes (title, content, createtime, author)
       values ('${title}', '${content}', ${createTime}, '${author}');
   `
 

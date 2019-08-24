@@ -61,7 +61,8 @@
             <div class="fit-route">请选择合适路线</div>
             <i class="iconfont iconxiangshang special"
               @click="cancelShow1Popup"></i>
-            <div class="v-popup-sure">确定</div>
+            <div class="v-popup-sure"
+              @click="sureChuxing">确定</div>
           </div>
           <div class="pane"
             id="pane"></div>
@@ -79,27 +80,23 @@
       class="v-pop-chuxing">
       <div class="chuxing">
         <h5>本次出行</h5>
-        <div class="v-pop-chuxing-item">
-          <div class="v-pop-chuxing-item-left">交通公交</div>
-          <div class="v-pop-chuxing-item-right">出租</div>
-        </div>
-        <div class="v-pop-chuxing-item">
-          <div class="v-pop-chuxing-item-left">出发地</div>
-          <div class="v-pop-chuxing-item-right">出租</div>
-        </div>
-        <div class="v-pop-chuxing-item">
-          <div class="v-pop-chuxing-item-left">目的地</div>
-          <div class="v-pop-chuxing-item-right">出租</div>
+        <div class="v-pop-chuxing-item"
+          v-for="(item,index) in chuxingList"
+          :key="index"
+          v-if="chuxingList&&chuxingList.length">
+          <div class="v-pop-chuxing-item-left">{{item.name}}</div>
+          <div class="v-pop-chuxing-item-right">{{item.txt}}</div>
         </div>
         <div class="v-pop-chuxing-item">
           <div class="v-pop-chuxing-item-left">花费</div>
           <div class="v-pop-chuxing-item-right">
-            <van-stepper v-model="huafei" />
+            <van-stepper v-model="huafei"
+              min=0 />
           </div>
         </div>
         <div class="v-pop-chuxing-item">
           <div class="v-pop-chuxing-item-left">日期</div>
-          <div class="v-pop-chuxing-item-right"></div>
+          <div class="v-pop-chuxing-item-right">{{currentTime}}</div>
         </div>
         <div class="v-pop-chuxing-item">
           <div class="v-pop-chuxing-item-left">备注</div>
@@ -122,11 +119,13 @@ export default {
     return {
       loactionMap: null,
       showPicker: false,
+      currentTime: '',
       huafei: 0,
       value: '',
       beizhu: '',
-      chuxingReport: true,
+      chuxingReport: false,
       originPlace: '',
+      chuxingList: [],
       originPlD: [],
       endPlace: '',
       endPlD: [],
@@ -242,6 +241,9 @@ export default {
         return false
       }
       that.show1 = true
+      this.chuxingList = [{ name: '交通公交', txt: this.value }, { name: '出发地', txt: this.originPlace }, {
+        name: '目的地', txt: this.endPlace
+      }]
       that.loactionMap.plugin(`AMap.${that.toolType[that.value]}`, function () {
         that.driving = new window.AMap[that.toolType[that.value]]({
           map: that.loactionMap,
@@ -252,6 +254,12 @@ export default {
         let endLngLat = that.endPlD
         that.driving.search(startLngLat, endLngLat)
       })
+    },
+    // 出行隐藏框
+    sureChuxing () {
+      this.chuxingReport = true
+      this.currentTime = this.$moment().format('YYYY-MM-DD HH:mm:ss')
+      this.show1 = false
     }
   },
   mounted () {
@@ -311,7 +319,8 @@ export default {
           }
           .v-popup-sure {
             font-size: 14px;
-            padding: 6px 10px;
+            padding: 0px 10px;
+            line-height: 28px;
             background: #2f86f6;
             border-radius: 6px;
             color: #fff;
