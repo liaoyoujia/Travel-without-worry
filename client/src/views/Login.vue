@@ -18,8 +18,14 @@
       </van-cell-group>
     </div>
     <div class="login-btn">
-      <img src="../assets/imgs/denglu.png" alt="login" class="login-img" @click="login">
-      <img src="../assets/imgs/zhuce.png" alt="register" class="regis-img" @click="goRegister">
+      <img src="../assets/imgs/denglu.png"
+        alt="login"
+        class="login-img"
+        @click="login">
+      <img src="../assets/imgs/zhuce.png"
+        alt="register"
+        class="regis-img"
+        @click="goRegister">
     </div>
   </div>
 
@@ -35,26 +41,26 @@ export default {
     }
   },
   methods: {
-    login(){
-          if(this.username&&this.password){
-            let o={}
-            o.username=this.username
-            o.password=this.password
-            this.$axios.getLogin(o).then((res)=>{
-              if(res.errno===0){
-                this.$router.push({name:'homeIndex'})
-            }else{
-              this.$toast.fail('登录失败！')
-            }
-          })
-          }else{
-            this.$toast.fail('请将信息填写完整！')
+    login () {
+      if (this.username && this.password) {
+        let o = {}
+        o.username = this.username
+        o.password = this.password
+        this.$axios.getLogin(o).then((res) => {
+          if (res.errno === 0) {
+            this.$router.push({ name: 'homeIndex' })
+          } else {
+            this.$toast.fail('登录失败！')
           }
-      },
-      // 跳转到注册界面
-      goRegister(){
-        this.$router.push({ name: 'register'})
+        })
+      } else {
+        this.$toast.fail('请将信息填写完整！')
       }
+    },
+    // 跳转到注册界面
+    goRegister () {
+      this.$router.push({ name: 'register' })
+    }
   }
 }
 </script>
@@ -103,11 +109,11 @@ export default {
     left: 50%;
     transform: translateX(-50%);
     width: 60%;
-    .login-img{
+    .login-img {
       width: 48px;
       margin-right: 50px;
     }
-    img{
+    img {
       width: 40px;
     }
   }

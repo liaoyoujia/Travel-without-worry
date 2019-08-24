@@ -1,18 +1,17 @@
 <template>
   <div class="home-detail">
-      <van-notice-bar
-      text="学习之用学习之用学习之用学习之用学习之用学习之用学习之用学习之用学习之用"
+    <van-notice-bar text="学习之用学习之用学习之用学习之用学习之用学习之用学习之用学习之用学习之用"
       left-icon="volume-o"
       class="v-notice"
-      mode="closeable"
-    />
+      mode="closeable" />
     <div id="container"></div>
     <div class="list">
       <div class="item">
         <i class="iconfont icondingwei"></i>
         <span>{{place}}</span>
       </div>
-      <div class="item" @click="toggleMap">
+      <div class="item"
+        @click="toggleMap">
         <i class="iconfont iconditu"></i>
         <span>地图</span>
       </div>
@@ -22,19 +21,33 @@
       </div>
 
     </div>
-    <div class="dingwei" id="dingwei" @click="goDing"></div>
-    <div class="start-end" @click="changeStatus">{{walkStatus}}</div>
+    <div class="dingwei"
+      id="dingwei"
+      @click="goDing"></div>
+    <div class="start-end"
+      @click="changeStatus">{{walkStatus}}</div>
     <!-- 地图选色弹出层 -->
-    <van-popup v-model="showMap" position="top">
+    <van-popup v-model="showMap"
+      position="top">
       <div class="v-pop-map">
         <div class="v-pop-map-header">地图颜色模式</div>
-          <van-radio-group v-model="radio"  class="pop-radio-list">
-              <van-radio :name="item.color" icon-size=6 checked-color="#07c160"  class="pop-radio" v-for="(item,index) in radioChoose" :key="index">{{item.txt}}</van-radio>
-            </van-radio-group>
+        <van-radio-group v-model="radio"
+          class="pop-radio-list">
+          <van-radio :name="item.color"
+            icon-size=6
+            checked-color="#07c160"
+            class="pop-radio"
+            v-for="(item,index) in radioChoose"
+            :key="index">{{item.txt}}</van-radio>
+        </van-radio-group>
       </div>
     </van-popup>
     <!-- 跑步地图 -->
-    <van-popup v-model="runCount" position="top" overlay-class="v-pop-runCount"	:overlay="pupOverlay" :class="pupOverlay?'v-pop-running':'v-pop-runingx'">
+    <van-popup v-model="runCount"
+      position="top"
+      overlay-class="v-pop-runCount"
+      :overlay="pupOverlay"
+      :class="pupOverlay?'v-pop-running':'v-pop-runingx'">
       <div class="v-pop-run">
         <span class="v-pop-num">0.00</span><span class="v-pop-kio">公里</span>
       </div>
@@ -44,99 +57,97 @@
           <div class="v-pop-time">总计时间</div>
         </div>
         <div class="v-pop-item">
-          <div  class="v-pop-dao">0.00</div>
+          <div class="v-pop-dao">0.00</div>
           <div class="v-pop-time">平均配速(km/h)</div>
         </div>
         <div class="v-pop-item">
-          <div  class="v-pop-dao">0.0</div>
+          <div class="v-pop-dao">0.0</div>
           <div class="v-pop-time">消耗能量(k)</div>
         </div>
       </div>
       <div class="v-pop-remark">
-          <van-field
-          v-model="remarkValue"
+        <van-field v-model="remarkValue"
           maxlength=40
           clearable
           label="备注"
           label-width=50
           class="v-pop-filder"
-          placeholder="请输入行程备注,字数不得超过40字！"
-        />
+          placeholder="请输入行程备注,字数不得超过40字！" />
       </div>
     </van-popup>
   </div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        loactionMap:null,
-        showMap:false,
-        remarkValue:'',
-        radioChoice:[{}],
-        distance:null,
-        walkStatus:'开始',
-        pupOverlay:true,
-        watchID:null,
-        time:{
-          timeMin:0,
-          timeSec:0,
-          timer:null,
-          trueTime:'00:00'
+export default {
+  data () {
+    return {
+      loactionMap: null,
+      showMap: false,
+      remarkValue: '',
+      radioChoice: [{}],
+      distance: null,
+      walkStatus: '开始',
+      pupOverlay: true,
+      watchID: null,
+      time: {
+        timeMin: 0,
+        timeSec: 0,
+        timer: null,
+        trueTime: '00:00'
+      },
+      place: '未知位置',
+      radio: 'normal',
+      tiMin: 0,
+      tiSec: 0,
+      runCount: false,
+      radioChoose: [
+        {
+          txt: '幻影黑',
+          color: 'dark'
         },
-        place:'未知位置',
-        radio:'normal',
-        tiMin:0,
-        tiSec:0,
-        runCount:false,
-        radioChoose:[
-          {
-            txt:'幻影黑',
-            color:'dark'
-          },
-          {
-            txt:'标准',
-            color:'normal'
-          },
-          {
-            txt:'月光银',
-            color:'light'
-          },
-          {
-            txt:'远山黛',
-            color:'whitesmoke'
-          },
-          {
-            txt:'雅士灰',
-            color:'grey'
-          },
-          {
-            txt:'马卡龙',
-            color:'macaron'
-          },
-          {
-            txt:'靛青蓝',
-            color:'blue'
-          },
-          {
-            txt:'极夜蓝',
-            color:'darkblue'
-          },
-          {
-            txt:'草色青',
-            color:'fresh'
-          },
-          {
-            txt:'涂鸦',
-            color:'graffiti'
-          },
-          {
-            txt:'酱籽',
-            color:'wine'
-          }
-        ],
-        geolocationData: [
+        {
+          txt: '标准',
+          color: 'normal'
+        },
+        {
+          txt: '月光银',
+          color: 'light'
+        },
+        {
+          txt: '远山黛',
+          color: 'whitesmoke'
+        },
+        {
+          txt: '雅士灰',
+          color: 'grey'
+        },
+        {
+          txt: '马卡龙',
+          color: 'macaron'
+        },
+        {
+          txt: '靛青蓝',
+          color: 'blue'
+        },
+        {
+          txt: '极夜蓝',
+          color: 'darkblue'
+        },
+        {
+          txt: '草色青',
+          color: 'fresh'
+        },
+        {
+          txt: '涂鸦',
+          color: 'graffiti'
+        },
+        {
+          txt: '酱籽',
+          color: 'wine'
+        }
+      ],
+      geolocationData: [
         [126.567402, 43.923187],
         [126.567402, 43.923129],
         [126.56744, 43.923098],
@@ -152,29 +163,29 @@
         [126.569564, 43.92348],
         [126.569859, 43.923944],
         [126.569172, 43.924199]
-      ], // 开始定位后设备移动收集的所有经纬坐标
-      }
+      ] // 开始定位后设备移动收集的所有经纬坐标
+    }
+  },
+  components: {},
+  watch: {
+    radio (newValue) {
+      this.changeTheme(newValue)
+    }
+  },
+  methods: {
+    // 初始化地图
+    initMap () {
+      this.loactionMap = new AMap.Map('container', {
+        center: [116.397428, 39.90923],
+        resizeEnable: true,
+        zoom: 13 // 地图显示的缩放级别
+      })
     },
-    components: {},
-    watch:{
-      radio(newValue){
-          this.changeTheme(newValue)
-      }
+    // 展示地图主题选择
+    toggleMap () {
+      this.showMap = true
     },
-    methods:{
-       // 初始化地图
-      initMap () {
-        this.loactionMap = new AMap.Map('container', {
-          center: [116.397428, 39.90923],
-          resizeEnable: true,
-          zoom: 13 // 地图显示的缩放级别
-        })
-      },
-      // 展示地图主题选择
-      toggleMap(){
-        this.showMap=true
-      },
-      // 移动轨迹图
+    // 移动轨迹图
     mapPath () {
       let that = this
       let lineArr = this.geolocationData.slice()
@@ -214,16 +225,16 @@
       that.loactionMap.setFitView()
       marker.moveAlong(lineArr, 200)
     },
-      // 手动定位
-      goDing(){
-        this.$toast.loading({
+    // 手动定位
+    goDing () {
+      this.$toast.loading({
         duration: 0,
         forbidClick: true,
         loadingType: 'circle',
         message: '定位中...'
-      });
-      },
-      // h5实时定位，记录每条定位，绘制轨迹图
+      })
+    },
+    // h5实时定位，记录每条定位，绘制轨迹图
     watchMap () {
       let that = this
       this.watchID = navigator.geolocation.watchPosition(
@@ -270,28 +281,28 @@
         window.AMap.GeometryUtil.distanceOfLine(tmpArr) / 1000
       ).toFixed(2)
     },
-        // 定位插件
+    // 定位插件
     dingWeiPlugin () {
       let that = this
-      let dingWei=document.getElementById('dingwei')
+      let dingWei = document.getElementById('dingwei')
       this.$toast.loading({
         duration: 0,
         forbidClick: true,
         loadingType: 'circle',
         message: '加载中...'
-      });
-      that.loactionMap.plugin(['AMap.Geolocation' ,'AMap.ControlBar'], function () {
+      })
+      that.loactionMap.plugin(['AMap.Geolocation', 'AMap.ControlBar'], function () {
         let geolocation = new window.AMap.Geolocation({
           enableHighAccuracy: true, //  是否使用高精度定位，默认:true
           timeout: 10000, //  超过10秒后停止定位，默认：无穷大
           buttonPosition: 'RB',
-          buttonDom:dingWei
+          buttonDom: dingWei
         })
         that.loactionMap.addControl(geolocation)
         geolocation.getCurrentPosition()
         window.AMap.event.addListener(geolocation, 'complete', (result) => {
-          if(result.addressComponent.district||result.addressComponent.city||result.addressComponent.street){
-            that.place=result.addressComponent.district||result.addressComponent.city||result.addressComponent.street
+          if (result.addressComponent.district || result.addressComponent.city || result.addressComponent.street) {
+            that.place = result.addressComponent.district || result.addressComponent.city || result.addressComponent.street
           }
           that.$toast.clear()
           that.loactionMap.setCenter(result.position)
@@ -305,102 +316,102 @@
       })
     },
     // 改变主题颜色
-    changeTheme(value){
-      if(this.loactionMap){
-      this.loactionMap.setMapStyle(`amap://styles/${value}`);
-      }else{
-        this.$toast.fail('发生未知错误！');
+    changeTheme (value) {
+      if (this.loactionMap) {
+        this.loactionMap.setMapStyle(`amap://styles/${value}`)
+      } else {
+        this.$toast.fail('发生未知错误！')
       }
     },
     // 变换状态（开始,结束,退出）
-    changeStatus(){
-      if(this.walkStatus==='开始'){
-        this.walkStatus='结束',
-        this.runCount=true,
+    changeStatus () {
+      if (this.walkStatus === '开始') {
+        this.walkStatus = '结束'
+        this.runCount = true
         this.startinterv()
         this.watchMap()
         return false
       }
-      if(this.walkStatus==='结束'){
+      if (this.walkStatus === '结束') {
         this.clearInterv(this)
         this.locationOnDelete() // 停止定位
-        this.pupOverlay=false
+        this.pupOverlay = false
         this.mapPath() // 绘制轨迹
-        this.walkStatus='退出'
+        this.walkStatus = '退出'
         return false
       }
-      if(this.walkStatus==='退出'){
-      this.$router.push({name:'homeIndex',params: { activing: 1}})
+      if (this.walkStatus === '退出') {
+        this.$router.push({ name: 'homeIndex', params: { activing: 1 } })
         return false
       }
     },
-      // 停止实时定位
-      locationOnDelete () {
+    // 停止实时定位
+    locationOnDelete () {
       let that = this
       navigator.geolocation.clearWatch(that.watchID)
       console.log('停止实时定位')
     },
     // 开启定时器
-    startinterv(){
+    startinterv () {
       this.clearInterv()
-      this.time['timer']=setInterval(this.Time,1000,this)
+      this.time['timer'] = setInterval(this.Time, 1000, this)
     },
     // 清除定时器
-    clearInterv(){
-      if(this.time['timer']){
+    clearInterv () {
+      if (this.time['timer']) {
         clearInterval(this.time['timer'])
       }
     },
     // 展示时间
-    Time(that){
-      let tiMin=0
-      let tiSec=0
-      let timeMin=that.time['timeMin'];
-      let timeSec=that.time['timeSec'];
-      if(timeMin<10){
-        timeMin='0'+timeMin
+    Time (that) {
+      let tiMin = 0
+      let tiSec = 0
+      let timeMin = that.time['timeMin']
+      let timeSec = that.time['timeSec']
+      if (timeMin < 10) {
+        timeMin = '0' + timeMin
       }
-      if(timeSec<10){
-        timeSec='0'+timeSec
+      if (timeSec < 10) {
+        timeSec = '0' + timeSec
       }
-      that.time['trueTime']=timeMin+':'+timeSec
+      that.time['trueTime'] = timeMin + ':' + timeSec
       that.time['timeSec']++
-      if(that.time['timeSec']>59){
-        that.time['timeSec']=0
+      if (that.time['timeSec'] > 59) {
+        that.time['timeSec'] = 0
         that.time['timeMin']++
       }
-      }
-    },
-      mounted () {
-      this.initMap()
-      this.dingWeiPlugin()
     }
+  },
+  mounted () {
+    this.initMap()
+    this.dingWeiPlugin()
+  }
 
 }
 </script>
 
 <style lang="scss" scope>
-.home-detail{
+.home-detail {
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  align-items:center;
+  align-items: center;
   flex-direction: column;
   padding-bottom: 50px;
   position: relative;
-   box-sizing: border-box;
+  box-sizing: border-box;
   height: 100vh;
-  .v-notice{
+  .v-notice {
     width: 100%;
     height: 36px;
-    box-sizing:border-box;
-    padding:0 8px;
+    box-sizing: border-box;
+    padding: 0 8px;
   }
-  #container{
-  width: 100%;
-  flex:1;
+  #container {
+    width: 100%;
+    flex: 1;
   }
-  .list{
+  .list {
     width: 300px;
     box-shadow: 0 0 2px #afaeae;
     display: flex;
@@ -410,41 +421,41 @@
     position: absolute;
     top: 20%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     align-items: center;
-    padding:12px 0;
+    padding: 12px 0;
 
-    .item{
-      flex:1;
+    .item {
+      flex: 1;
       height: 16px;
-      line-height:16px;
+      line-height: 16px;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding:0 10px;
-      i{
+      padding: 0 10px;
+      i {
         position: relative;
         top: 1px;
       }
-      span{
+      span {
         font-size: 14px;
         margin-left: 4px;
       }
     }
   }
   /deep/.van-popup {
-    background-color:transparent;
+    background-color: transparent;
   }
-  .dingwei{
+  .dingwei {
     position: relative;
-    top:-444px;
+    top: -444px;
     right: 28px;
-    width:80px;
+    width: 80px;
     height: 40px;
     background-color: transparent;
-    z-index:3000
+    z-index: 3000;
   }
-  .start-end{
+  .start-end {
     position: absolute;
     bottom: 14%;
     left: 50%;
@@ -453,7 +464,7 @@
     margin-top: -50px;
     width: 100px;
     height: 100px;
-    background-color:#57c595;
+    background-color: #57c595;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -461,72 +472,71 @@
     font-size: 18px;
     font-weight: bold;
     color: #fff;
-    box-shadow: 0 1px 5px 0px  #afaeae;
-
+    box-shadow: 0 1px 5px 0px #afaeae;
   }
-  .v-pop-runCount{
+  .v-pop-runCount {
     width: 100%;
-    background: rgba(255,255,255,.9)!important;
+    background: rgba(255, 255, 255, 0.9) !important;
   }
 
-  .v-pop-runingx{
+  .v-pop-runingx {
     width: 100%;
     height: 30vh;
     background-color: #fff;
-    .v-pop-run{
+    .v-pop-run {
       width: 100%;
-       position: absolute;
-       top: 3%;
-       left: 0;
+      position: absolute;
+      top: 3%;
+      left: 0;
       font-style: italic;
-      .v-pop-num{
-          font-size: 88px;
-          font-weight: bold;
-          color:#555;
-          margin-right: 10px;
-        }
-        .v-pop-kio{
-          color:#555;
-          font-size: 16px;
-        }
+      .v-pop-num {
+        font-size: 88px;
+        font-weight: bold;
+        color: #555;
+        margin-right: 10px;
       }
-      .v-pop-list{
-        position: absolute;
-        top: 53%;
-        left: 0;
-        width: 100%;
+      .v-pop-kio {
+        color: #555;
+        font-size: 16px;
+      }
+    }
+    .v-pop-list {
+      position: absolute;
+      top: 53%;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      color: #555;
+      .v-pop-item {
+        flex: 1;
         display: flex;
+        flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        color:#555;
-        .v-pop-item{
-          flex: 1;
-          display: flex;
-          flex-direction:column;
-          justify-content: flex-start;
-          align-items:center;
-          .v-pop-dao{
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 4px;
-            font-style: italic;
-          }
-          .v-pop-time{
-            font-size:12px;
-          }
+        .v-pop-dao {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 4px;
+          font-style: italic;
+        }
+        .v-pop-time {
+          font-size: 12px;
         }
       }
-      .v-pop-remark{
-        width: 100%;
-        box-sizing: border-box;
-        position: absolute;
-        bottom: 0%;
-        padding:0 20px;
-        .v-pop-filder{
-          padding-bottom: 6rpx;
-          border-bottom: 1Px solid #e2e4ea;
-        }
+    }
+    .v-pop-remark {
+      width: 100%;
+      box-sizing: border-box;
+      position: absolute;
+      bottom: 0%;
+      padding: 0 20px;
+      .v-pop-filder {
+        padding-bottom: 6rpx;
+        border-bottom: 1px solid #e2e4ea;
       }
+    }
     /* .v-pop-run{
       position: absolute;
        top: 3%;
@@ -543,100 +553,88 @@
     } */
   }
 
-
-
-
-
-  .v-pop-running{
+  .v-pop-running {
     width: 100%;
     height: 100vh;
-      .v-pop-run{
+    .v-pop-run {
       width: 100%;
-       position: absolute;
-       top: 11.99%;
-       left: 0;
+      position: absolute;
+      top: 11.99%;
+      left: 0;
       font-style: italic;
-      .v-pop-num{
-          font-size: 88px;
-          font-weight: bold;
-          color:#555;
-          margin-right: 10px;
-        }
-        .v-pop-kio{
-          color:#555;
-          font-size: 16px;
-        }
+      .v-pop-num {
+        font-size: 88px;
+        font-weight: bold;
+        color: #555;
+        margin-right: 10px;
       }
-      .v-pop-list{
-        position: absolute;
-        top: 37.48%;
-        left: 0;
-        width: 100%;
+      .v-pop-kio {
+        color: #555;
+        font-size: 16px;
+      }
+    }
+    .v-pop-list {
+      position: absolute;
+      top: 37.48%;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      color: #555;
+      .v-pop-item {
+        flex: 1;
         display: flex;
+        flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        color:#555;
-        .v-pop-item{
-          flex: 1;
-          display: flex;
-          flex-direction:column;
-          justify-content: flex-start;
-          align-items:center;
-          .v-pop-dao{
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 4px;
-            font-style: italic;
-          }
-          .v-pop-time{
-            font-size:12px;
-          }
+        .v-pop-dao {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 4px;
+          font-style: italic;
         }
-      }
-      .v-pop-remark{
-        width: 100%;
-        box-sizing: border-box;
-        position: absolute;
-       top:56.97%;
-        padding:0 20px;
-        .v-pop-filder{
-          padding-bottom: 6rpx;
-          border-bottom: 1Px solid #e2e4ea;
+        .v-pop-time {
+          font-size: 12px;
         }
       }
     }
-
-
-
-
-
-
-
+    .v-pop-remark {
+      width: 100%;
+      box-sizing: border-box;
+      position: absolute;
+      top: 56.97%;
+      padding: 0 20px;
+      .v-pop-filder {
+        padding-bottom: 6rpx;
+        border-bottom: 1px solid #e2e4ea;
+      }
+    }
   }
+}
 /* } */
 
-.v-pop-map{
+.v-pop-map {
   width: 100%;
   padding: 20px;
   box-sizing: border-box;
-  .v-pop-map-header{
+  .v-pop-map-header {
     width: 100%;
-    text-align:center;
-    font-size:16px;
-    padding-bottom:20px;
+    text-align: center;
+    font-size: 16px;
+    padding-bottom: 20px;
   }
-  .pop-radio-list{
+  .pop-radio-list {
     width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
-  .pop-radio{
-    width: 50%;
-    font-size: 14px;
-    margin-bottom: 14px;
-  }
+    .pop-radio {
+      width: 50%;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
   }
 }
-
 </style>

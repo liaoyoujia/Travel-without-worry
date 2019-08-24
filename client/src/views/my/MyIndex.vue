@@ -22,7 +22,8 @@
       <div class="my-infor-title">我的信息</div>
       <div class="my-infor-tool">
         <div v-for="(item,index) in inforData"
-          :key="index" @click="goDetail(item.id)">
+          :key="index"
+          @click="goDetail(item.id)">
           <i class="iconfont"
             :class="item['icon']"></i>
           <span>{{ item.txt }}</span>
@@ -49,23 +50,23 @@
 import Axios from '../../plugins/axios/index.js'
 export default {
   name: 'myIndex',
-  props:{
-    person:{
-      type:Object
+  props: {
+    person: {
+      type: Object
     }
   },
-  watch:{
-    person: {  
-　　　　handler(newValue, oldValue) {  
-        this.personData=newValue
-　　　　},  
-　　　　deep: true, 
-       immediate: true
-　　}  
+  watch: {
+    person: {
+      handler (newValue, oldValue) {
+        this.personData = newValue
+      },
+      deep: true,
+      immediate: true
+    }
   },
   data () {
     return {
-      personData:{},
+      personData: {},
       userData: [
         {
           txt: '好友',
@@ -86,22 +87,22 @@ export default {
       ],
       inforData: [
         {
-          id:'xinxi',
+          id: 'xinxi',
           icon: 'iconmessage',
           txt: '信息总览'
         },
         {
-          id:'chuxing',
+          id: 'chuxing',
           icon: 'iconwapchuxing',
           txt: '出行趋势'
         },
         {
-          id:'fenxin',
+          id: 'fenxin',
           icon: 'iconfenxi',
           txt: '数据分析'
         },
         {
-          id:'chengjiu',
+          id: 'chengjiu',
           icon: 'iconchenggong',
           txt: '成就殿堂'
         }
@@ -150,19 +151,19 @@ export default {
       ]
     }
   },
-  mounted(){
+  mounted () {
   },
   methods: {
-    goDetail(id){
-            switch (id) {
-          case 'xinxi':
-              this.$router.push({name:'myInfor'})
-              break;
-          case 'chuxing':
-              break;
-          case 'fenxin':
-              break;
-          case 'chengjiu':
+    goDetail (id) {
+      switch (id) {
+        case 'xinxi':
+          this.$router.push({ name: 'myInfor' })
+          break
+        case 'chuxing':
+          break
+        case 'fenxin':
+          break
+        case 'chengjiu':
       }
     }
   }

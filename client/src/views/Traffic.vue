@@ -31,7 +31,8 @@
             @input="searchPlace($event,'end')" />
         </van-col>
         <van-col span="8"
-          class="search-type" @click.native="getRoadLine()">搜索</van-col>
+          class="search-type"
+          @click.native="getRoadLine()">搜索</van-col>
       </van-row>
     </div>
     <div class="box">
@@ -59,7 +60,7 @@
           <div class="v-popup-header">
             <div class="fit-route">请选择合适路线</div>
             <i class="iconfont iconxiangshang special"
-            @click="cancelShow1Popup"></i>
+              @click="cancelShow1Popup"></i>
             <div class="v-popup-sure">确定</div>
           </div>
           <div class="pane"
@@ -75,7 +76,7 @@
         @confirm="onConfirm" />
     </van-popup>
     <van-popup v-model="chuxingReport"
-    class="v-pop-chuxing">
+      class="v-pop-chuxing">
       <div class="chuxing">
         <h5>本次出行</h5>
         <div class="v-pop-chuxing-item">
@@ -93,7 +94,7 @@
         <div class="v-pop-chuxing-item">
           <div class="v-pop-chuxing-item-left">花费</div>
           <div class="v-pop-chuxing-item-right">
-              <van-stepper v-model="huafei" />
+            <van-stepper v-model="huafei" />
           </div>
         </div>
         <div class="v-pop-chuxing-item">
@@ -103,11 +104,9 @@
         <div class="v-pop-chuxing-item">
           <div class="v-pop-chuxing-item-left">备注</div>
           <div class="v-pop-chuxing-item-right">
-              <van-field
-              v-model="beizhu"
+            <van-field v-model="beizhu"
               maxlength=20
-              placeholder="输入行程备注,少于20字！"
-            />
+              placeholder="输入行程备注,少于20字！" />
           </div>
         </div>
         <div class="chuxing-save">确认保存</div>
@@ -122,24 +121,24 @@ export default {
   data () {
     return {
       loactionMap: null,
-      showPicker:false,
-      huafei:0,
+      showPicker: false,
+      huafei: 0,
       value: '',
-      beizhu:'',
-      chuxingReport:true,
+      beizhu: '',
+      chuxingReport: true,
       originPlace: '',
       originPlD: [],
       endPlace: '',
       endPlD: [],
-      driving:null,
+      driving: null,
       show: false,
       show1: false,
       columns: ['公交/地铁', '出租车', '单车/电车', '步行'],
-      toolType:{
-        '公交/地铁':'Transfer',
-        '出租车':'Driving',
-        '单车/电车':'Riding',
-        '步行':'Walking',
+      toolType: {
+        '公交/地铁': 'Transfer',
+        '出租车': 'Driving',
+        '单车/电车': 'Riding',
+        '步行': 'Walking'
       },
       searchData: []
     }
@@ -213,12 +212,12 @@ export default {
       this.show = false
     },
     // 取消路线弹出层
-    cancelShow1Popup(){
+    cancelShow1Popup () {
       this.show1 = false
     },
     // 选择地点
     choosePlace (place, type, placeDetail) {
-      this.show=false
+      this.show = false
       if (type === 'org') {
         this.originPlace = place
         this.originPlD = placeDetail && [placeDetail.lng, placeDetail.lat]
@@ -235,12 +234,12 @@ export default {
     // 得到出行路线
     getRoadLine () {
       let that = this
-      if(that.driving){
+      if (that.driving) {
         that.driving.clear()
       }
-      if (that.originPlace === '' || that.endPlace === '' || that.originPlD.length === 0 || that.endPlD.length === 0||that.value==='') {
-        this.$toast('请将数据填写完全');
-        return  false
+      if (that.originPlace === '' || that.endPlace === '' || that.originPlD.length === 0 || that.endPlD.length === 0 || that.value === '') {
+        this.$toast('请将数据填写完全')
+        return false
       }
       that.show1 = true
       that.loactionMap.plugin(`AMap.${that.toolType[that.value]}`, function () {
@@ -285,39 +284,39 @@ export default {
       width: 100%;
       position: relative;
       height: calc(100vh - 154px);
-      .v-popup-show1{
-      width: 100%;
-      height: calc(100vh - 254px);
-      position: absolute;
-      top: 100px;
-      left: 0;
-      z-index: 2001;
-      background-color: rgba(255, 255, 255, 0.8);
-      overflow-y: auto;
-      .v-popup-header{
+      .v-popup-show1 {
         width: 100%;
-        box-sizing:border-box;
-        padding: 6px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items:center;
-        .fit-route{
-          color: #929090;
-          font-size: 14px;
+        height: calc(100vh - 254px);
+        position: absolute;
+        top: 100px;
+        left: 0;
+        z-index: 2001;
+        background-color: rgba(255, 255, 255, 0.8);
+        overflow-y: auto;
+        .v-popup-header {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 6px 20px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .fit-route {
+            color: #929090;
+            font-size: 14px;
+          }
+          .special {
+            position: relative;
+            top: 0;
+            font-size: 36px;
+          }
+          .v-popup-sure {
+            font-size: 14px;
+            padding: 6px 10px;
+            background: #2f86f6;
+            border-radius: 6px;
+            color: #fff;
+          }
         }
-      .special {
-        position: relative;
-        top: 0;
-        font-size: 36px;
-      }
-      .v-popup-sure{
-        font-size:14px;
-        padding: 6px 10px;
-        background: #2f86f6;
-        border-radius: 6px;
-        color:#fff;
-      }
-      }
       }
     }
     .v-popup {
@@ -366,46 +365,45 @@ export default {
     }
   }
 }
-.v-pop-chuxing{
+.v-pop-chuxing {
   width: 80%;
   border-radius: 10px;
-    .chuxing{
+  .chuxing {
+    width: 100%;
+    padding: 20px 20px;
+    box-sizing: border-box;
+    background-color: #fff;
+    h5 {
+      font-size: 20px;
+      padding-bottom: 10px;
+    }
+    .v-pop-chuxing-item {
       width: 100%;
-      padding:20px 20px;
-      box-sizing:border-box;
-      background-color: #fff;
-      h5{
-        font-size: 20px;
-        padding-bottom: 10px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      color: #41485d;
+      margin-bottom: 22px;
+      font-size: 12px;
+      .v-pop-chuxing-item-left {
+        width: 25%;
+        text-align: left;
       }
-      .v-pop-chuxing-item{
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        color: #41485d;
-        margin-bottom: 22px;
-        font-size: 12px;
-        .v-pop-chuxing-item-left{
-          width: 25%;
-          text-align:left;
-        }
-        .v-pop-chuxing-item-right{
-          width: 75%;
-          text-align:right;
-        }
-      }
-      .chuxing-save{
-        margin-top: 16px;
-        text-align: center;
-        color: #2f86f6;
-        font-size: 18px;
+      .v-pop-chuxing-item-right {
+        width: 75%;
+        text-align: right;
       }
     }
+    .chuxing-save {
+      margin-top: 16px;
+      text-align: center;
+      color: #2f86f6;
+      font-size: 18px;
+    }
+  }
 }
 .pane {
   width: 100%;
   overflow-y: auto;
-
 }
 </style>
