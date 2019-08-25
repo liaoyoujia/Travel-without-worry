@@ -266,12 +266,12 @@ export default {
     // 上传数据
     // userId, type, trafficType, diatance, date, price, startPlace, startCode, endPlace, endCode,mask
     uploadData () {
+      let that = this
       let o = {}
       o.userId = 2
       // 0 跑步 骑车那种  1搜地图那种
       o.type = 1
       o.trafficType = this.value
-      o.distance = 1.2
       o.date = this.currentTime
       o.price = this.huafei
       o.startPlace = this.originPlace
@@ -279,7 +279,36 @@ export default {
       o.startCode = this.originPlD
       o.endCode = this.endPlD
       o.mask = this.beizhu
-      this.$axios.getRouteNew(o).then((res) => { console.log(res) })
+      this.$axios.getRouteNew(o).then((res) => {
+        if (res.errno === 0) {
+          this.$toast({
+            type: 'success',
+            message: '数据上传成功！',
+            forbidClick: true,
+            onOpened: function () {
+              that.chuxingReport = false
+              that.originPlD = []
+              that.endPlace = ''
+              that.originPlace = ''
+              that.endPlD = []
+            }
+          })
+        } else {
+          this.$toast({
+            type: 'fail',
+            message: '数据上传失败！',
+            forbidClick: true,
+            onOpened: function () {
+              that.chuxingReport = false
+              that.originPlD = []
+              that.endPlace = ''
+              that.originPlace = ''
+              that.endPlD = []
+            }
+          })
+        }
+        console.log(res)
+      })
     }
 
   },

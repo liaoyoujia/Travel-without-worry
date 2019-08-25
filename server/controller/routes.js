@@ -20,21 +20,11 @@ const getDetail = (id) => {
   })
 }
 const newRoutes = (blogData = {}) => {
-  // blogData 是一个博客对象，包含 title content author 属性
-  let { userId, type, trafficType, distance, date, price, startPlace, startCode, endPlace, endCode, mask } = blogData
-  // const title = xss(blogData.title)
-  // const content = xss(blogData.content)
-  // const author = blogData.author
-  // const createTime = Date.now()
+  let { userId, type, trafficType, date, price, startPlace, startCode, endPlace, endCode, mask } = blogData
   const sql = `
-      insert into routes (userId, type, trafficType, distance, date, price, startPlace, startCode, endPlace, endCode,mask)
-      values ('${userId}', '${type}', '${trafficType}', '${distance}', '${date}', '${price}', '${startPlace}', '${startCode}', '${endPlace}', '${endCode}', '${mask}');
+      insert into routes (userId, type, trafficType, date, price, startPlace, startCode, endPlace, endCode,mask)
+      values ('${userId}', '${type}', '${trafficType}', '${date}', '${price}', '${startPlace}', '${startCode}', '${endPlace}', '${endCode}', '${mask}');
   `
-  // const sql = `
-  //     insert into routes (userId, type, trafficType, diatance, date,speed,price,startPlace,startCode,endPlace,endCode,mask)
-  //     values ('${userId}', '${type}', ${trafficType}, '${diatance}');
-  // `
-
   return exec(sql).then(insertData => {
     console.log('insertData is ', insertData)
     return {
