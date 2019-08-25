@@ -106,7 +106,8 @@
               placeholder="输入行程备注,少于20字！" />
           </div>
         </div>
-        <div class="chuxing-save">确认保存</div>
+        <div class="chuxing-save"
+          @click="uploadData">确认保存</div>
       </div>
     </van-popup>
   </div>
@@ -123,6 +124,7 @@ export default {
       huafei: 0,
       value: '',
       beizhu: '',
+      // chuxingReport: true,
       chuxingReport: false,
       originPlace: '',
       chuxingList: [],
@@ -260,7 +262,26 @@ export default {
       this.chuxingReport = true
       this.currentTime = this.$moment().format('YYYY-MM-DD HH:mm:ss')
       this.show1 = false
+    },
+    // 上传数据
+    // userId, type, trafficType, diatance, date, price, startPlace, startCode, endPlace, endCode,mask
+    uploadData () {
+      let o = {}
+      o.userId = 2
+      // 0 跑步 骑车那种  1搜地图那种
+      o.type = 1
+      o.trafficType = this.value
+      o.distance = 1.2
+      o.date = this.currentTime
+      o.price = this.huafei
+      o.startPlace = this.originPlace
+      o.endPlace = this.endPlace
+      o.startCode = this.originPlD
+      o.endCode = this.endPlD
+      o.mask = this.beizhu
+      this.$axios.getRouteNew(o).then((res) => { console.log(res) })
     }
+
   },
   mounted () {
     this.initMap()

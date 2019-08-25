@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const loginCheck = require('../middleware/index')
-const { getList, getDetail, newBlog, updateBlog, delBlog } = require('../controller/blog')
+const { getList, getDetail, newRoutes, updateBlog, delBlog } = require('../controller/routes')
 /* GET home page. */
 router.get('/list', loginCheck, (req, res, next) => {
   // let author = req.query.author || ''
@@ -10,9 +10,6 @@ router.get('/list', loginCheck, (req, res, next) => {
   let keyword = req.query.keyword || ''
   const result = getList(author, keyword)
   return result.then(listData => {
-    // if()
-
-
     res.json(
       new SuccessModel(listData)
     )
@@ -27,14 +24,14 @@ router.get('/detail', loginCheck, (req, res, next) => {
     )
   })
 });
-router.post('/new', loginCheck, (req, res, next) => {
-  req.body.author = req.session.username
-  const result = newBlog(req.body)
+router.post('/newTrip', loginCheck, (req, res, next) => {
+  const result = newRoutes(req.body)
+  console.log(req.body, 123456789)
   return result.then(data => {
     res.json(
       new SuccessModel(data)
     )
-  })
+  }).catch((err) => { console.log(err, 31231312313131) })
 })
 
 router.post('/update', loginCheck, (req, res, next) => {

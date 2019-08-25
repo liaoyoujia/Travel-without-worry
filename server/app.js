@@ -5,7 +5,7 @@ let logger = require('morgan');
 const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
 
-let blogRouter = require('./routes/blog');
+let routesRouter = require('./routes/routes');
 let usersRouter = require('./routes/users');
 let ruleUserRouter = require('./routes/ruleUser');
 
@@ -34,7 +34,7 @@ app.use(session({
   store: sessionStore
 }))
 app.use('/api/users', usersRouter);
-app.use('/api/blogs', blogRouter);
+app.use('/api/routes', routesRouter);
 app.use('/api/ruleUsers', ruleUserRouter);
 
 module.exports = app;

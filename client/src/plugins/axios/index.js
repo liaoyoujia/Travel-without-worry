@@ -1,8 +1,8 @@
 import user from './module/user'
-import blog from './module/blog'
+import route from './module/route'
 import ruleUser from './module/ruleUser'
 export default {
   ...user,
-  ...blog,
+  ...route,
   ...ruleUser
 }

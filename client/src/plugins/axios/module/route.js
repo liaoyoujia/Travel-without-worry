@@ -5,8 +5,8 @@ let getBlogList = (params) => {
 let getBlogDetail = (params) => {
   return http({ method: 'get', url: '/api/blogs/detail', params })
 }
-let getBlogNew = (data) => {
-  return http({ method: 'post', url: '/api/blogs/new', data })
+let getRouteNew = (data) => {
+  return http({ method: 'post', url: '/api/routes/newTrip', data })
 }
 let getBlogUpdate = (data) => {
   return http({ method: 'post', url: '/api/blogs/update', data })
@@ -18,7 +18,7 @@ let getBlogDel = (data) => {
 export default {
   getBlogList,
   getBlogDetail,
-  getBlogNew,
+  getRouteNew,
   getBlogUpdate,
   getBlogDel
 }
