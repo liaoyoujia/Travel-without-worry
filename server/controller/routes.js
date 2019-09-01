@@ -19,11 +19,24 @@ const getDetail = (id) => {
     return rows[0]
   })
 }
-const newRoutes = (blogData = {}) => {
-  let { userId, type, trafficType, date, price, startPlace, startCode, endPlace, endCode, mask } = blogData
+const newRouteAs = (routeData = {}) => {
+  let { userId, type, trafficType, date, price, startPlace, startCode, endPlace, endCode, mask } = routeData
   const sql = `
       insert into routes (userId, type, trafficType, date, price, startPlace, startCode, endPlace, endCode,mask)
       values ('${userId}', '${type}', '${trafficType}', '${date}', '${price}', '${startPlace}', '${startCode}', '${endPlace}', '${endCode}', '${mask}');
+  `
+  return exec(sql).then(insertData => {
+    console.log('insertData is ', insertData)
+    return {
+      id: insertData.insertId
+    }
+  })
+}
+const newRouteBs = (routeData = {}) => {
+  let { userId, type, trafficType, date, calorie, time, line, mask } = routeData
+  const sql = `
+      insert into routes (userId, type, trafficType, date, calorie, time, line, mask)
+      values ('${userId}', '${type}', '${trafficType}', '${date}', '${calorie}', '${time}', '${line}',  '${mask}');
   `
   return exec(sql).then(insertData => {
     console.log('insertData is ', insertData)
@@ -64,7 +77,8 @@ const delBlog = (id, author) => {
   })
 }
 module.exports = {
-  newRoutes,
+  newRouteAs,
+  newRouteBs,
   updateBlog,
   delBlog,
   getList,
