@@ -5,8 +5,7 @@ import Register from './views/Register.vue'
 import Main from './layout/index.vue'
 
 Vue.use(Router)
-
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
@@ -83,3 +82,12 @@ export default new Router({
     }
   ]
 })
+router.beforeEach((to, from, next) => {
+  // console.log(12312315534543534534)
+  // if (to.name === 'login') {
+  // } else {
+  next()
+  // }
+
+})
+export default router

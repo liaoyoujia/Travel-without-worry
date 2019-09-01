@@ -1,6 +1,7 @@
 import * as types from '../mutations-types'
 
 export default {
+  namespaced: true,
   state: {
     user: null,
     userDistance: null

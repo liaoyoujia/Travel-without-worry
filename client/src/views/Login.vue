@@ -27,11 +27,13 @@
         class="regis-img"
         @click="goRegister">
     </div>
+    <div>{{user}}3123123</div>
   </div>
 
 </template>
 
 <script>
+import { mapActions,mapGetters } from 'vuex'
 export default {
   name: 'login',
   data () {
@@ -40,22 +42,37 @@ export default {
       password: ''
     }
   },
+  computed: {
+    ...mapGetters(['user'])
+  },
+  mounted(){
+    console.log(this.user,11111111)
+  },
   methods: {
+    ...mapActions([
+      'setUser',
+    ]),
     login () {
-      if (this.username && this.password) {
+       if (this.username && this.password) {
         let o = {}
         o.username = this.username
         o.password = this.password
-        this.$axios.getLogin(o).then((res) => {
-          if (res.errno === 0) {
-            this.$router.push({ name: 'homeIndex' })
-          } else {
-            this.$toast.fail('登录失败！')
-          }
-        })
-      } else {
-        this.$toast.fail('请将信息填写完整！')
+        this.setUser(o)
       }
+      // if (this.username && this.password) {
+      //   let o = {}
+      //   o.username = this.username
+      //   o.password = this.password
+      //   this.$axios.getLogin(o).then((res) => {
+      //     if (res.errno === 0) {
+      //       this.$router.push({ name: 'homeIndex' })
+      //     } else {
+      //       this.$toast.fail('登录失败！')
+      //     }
+      //   })
+      // } else {
+      //   this.$toast.fail('请将信息填写完整！')
+      // }
     },
     // 跳转到注册界面
     goRegister () {

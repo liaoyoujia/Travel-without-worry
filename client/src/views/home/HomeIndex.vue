@@ -24,7 +24,6 @@
 </template>
 
 <script>
-  import Axios from '../../plugins/axios/index.js'
   import Tab from './components/tab.vue'
   export default {
     name: 'homeIndex',

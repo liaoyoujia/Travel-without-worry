@@ -49,7 +49,7 @@
       :overlay="pupOverlay"
       :class="pupOverlay?'v-pop-running':'v-pop-runingx'">
       <div class="v-pop-run">
-        <span class="v-pop-num">0.00</span><span class="v-pop-kio">公里</span>
+        <span class="v-pop-num"></span>{{runData.kilo}}<span class="v-pop-kio">公里</span>
       </div>
       <div class="v-pop-list">
         <div class="v-pop-item">
@@ -57,11 +57,11 @@
           <div class="v-pop-time">总计时间</div>
         </div>
         <div class="v-pop-item">
-          <div class="v-pop-dao">0.00</div>
+          <div class="v-pop-dao">{{runData.kmh}}</div>
           <div class="v-pop-time">平均配速(km/h)</div>
         </div>
         <div class="v-pop-item">
-          <div class="v-pop-dao">0.0</div>
+          <div class="v-pop-dao">{{runData.kem}}</div>
           <div class="v-pop-time">消耗能量(k)</div>
         </div>
       </div>
@@ -85,8 +85,14 @@ export default {
       loactionMap: null,
       showMap: false,
       remarkValue: '',
+      type:['行走','跑步','骑行','自驾'],
       radioChoice: [{}],
       distance: null,
+      runData:{
+        kilo:'0.00',
+        kmh:'0.00',
+        kem:'0.0'
+      },
       walkStatus: '开始',
       pupOverlay: true,
       watchID: null,
@@ -167,6 +173,11 @@ export default {
     }
   },
   components: {},
+  computed: {
+    trafficType(){
+      return this.type[this.$store.state.home.tabIndexs]
+    }
+  },
   watch: {
     radio (newValue) {
       this.changeTheme(newValue)
@@ -236,6 +247,7 @@ export default {
     },
     // h5实时定位，记录每条定位，绘制轨迹图
     watchMap () {
+      console.log('开始了')
       let that = this
       this.watchID = navigator.geolocation.watchPosition(
         function (position) {
@@ -277,6 +289,10 @@ export default {
         let tmpItem = new window.AMap.LngLat(item[0], item[1])
         tmpArr.push(tmpItem)
       })
+      // this.runData.kilo =90
+      this.runData.kilo = (
+        window.AMap.GeometryUtil.distanceOfLine(tmpArr) / 1000
+      ).toFixed(2)
       this.distance = (
         window.AMap.GeometryUtil.distanceOfLine(tmpArr) / 1000
       ).toFixed(2)
@@ -336,6 +352,7 @@ export default {
         this.clearInterv(this)
         this.locationOnDelete() // 停止定位
         this.pupOverlay = false
+        this.uploadData()
         this.mapPath() // 绘制轨迹
         this.walkStatus = '退出'
         return false
@@ -344,6 +361,21 @@ export default {
         this.$router.push({ name: 'homeIndex', params: { activing: 1 } })
         return false
       }
+    },
+    // 提交数据
+    uploadData () {
+      let o = {
+        userId:1,
+        type:0,// 0 跑步 骑车那种  1搜地图那种
+        trafficType:this.trafficType,
+        date:'2018-09-13',
+        mask:this.remarkValue,
+        time:this.time['trueTime'],
+        calorie:this.runData.kem,
+        speed:this.runData.kmh,
+        line:this.geolocationData,
+      }
+      this.$axios.getRouteMap(o).then((res) => {if(res.errno===0){console.log(res,1231231)}})
     },
     // 停止实时定位
     locationOnDelete () {
@@ -383,6 +415,7 @@ export default {
     }
   },
   mounted () {
+    console.log(this.trafficType)
     this.initMap()
     this.dingWeiPlugin()
   }
@@ -453,7 +486,7 @@ export default {
     width: 80px;
     height: 40px;
     background-color: transparent;
-    z-index: 3000;
+    z-index: 1000;
   }
   .start-end {
     position: absolute;
@@ -476,6 +509,7 @@ export default {
   }
   .v-pop-runCount {
     width: 100%;
+    z-index: 1009;
     background: rgba(255, 255, 255, 0.9) !important;
   }
 
@@ -488,6 +522,7 @@ export default {
       position: absolute;
       top: 3%;
       left: 0;
+      font-weight: bold;
       font-style: italic;
       .v-pop-num {
         font-size: 88px;
@@ -537,20 +572,6 @@ export default {
         border-bottom: 1px solid #e2e4ea;
       }
     }
-    /* .v-pop-run{
-      position: absolute;
-       top: 3%;
-    }
-    .v-pop-list{
-        position: absolute;
-        top: 50%;
-        left: 0;
-    }
-    .v-pop-remark{
-      position: absolute;
-        bottom: 10%;
-        left: 0;
-    } */
   }
 
   .v-pop-running {
@@ -561,6 +582,7 @@ export default {
       position: absolute;
       top: 11.99%;
       left: 0;
+      font-size:bold;
       font-style: italic;
       .v-pop-num {
         font-size: 88px;
