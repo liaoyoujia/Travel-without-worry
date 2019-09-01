@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapActions,mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'login',
   data () {
@@ -45,15 +45,15 @@ export default {
   computed: {
     ...mapGetters(['user'])
   },
-  mounted(){
-    console.log(this.user,11111111)
+  mounted () {
+    console.log(this.user, 11111111)
   },
   methods: {
     ...mapActions([
-      'setUser',
+      'setUser'
     ]),
     login () {
-       if (this.username && this.password) {
+      if (this.username && this.password) {
         let o = {}
         o.username = this.username
         o.password = this.password
