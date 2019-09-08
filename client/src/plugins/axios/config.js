@@ -4,7 +4,7 @@ import router from '@/router.js'
 import vue from '@/main.js'
 // 创建axios实例
 const instance = axios.create({
-  baseURL: '/',
+  baseURL: 'http://47.98.141.158:3000/',
   timeout: 6000 // 请求超时时间10秒
 })
 
@@ -12,11 +12,11 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     vue.$toast.loading({
-      duration: 0,       // 持续展示 toast
+      duration: 0, // 持续展示 toast
       forbidClick: true, // 禁用背景点击
       loadingType: 'spinner',
       message: '加载中...'
-    });
+    })
     // const { vx_token } = store.state.user
     // const { url } = config
     // if ((url.indexOf('authentication/user') === -1) && vx_token) {
