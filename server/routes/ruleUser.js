@@ -22,6 +22,11 @@ router.get('/person', loginCheck, (req, res, next) => {
     )
   })
 });
-
+router.get('/test',(req, res, next) => {
+    return res.body={
+     id:1,
+     msg:'dasdasdasd'
+    }
+});
 
 module.exports = router;
