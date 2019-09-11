@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "pm2 start ./bin/www"
+    "start": "node start ./bin/www"
   },
   "dependencies": {
     "connect-redis": "^3.4.1",
